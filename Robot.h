@@ -1,4 +1,63 @@
 #ifndef ROBOT_H
+	#define SENS_M1 8
+	#define SENS_M2 9
+	#define enablePin 5
+	#include "Sonor.h"
+	#include "Printer.h"
+#endif
+class Robot{
+    private:
+		Sonor *sonor = NULL;
+    	Printer *printer = NULL;
+	public:
+	    Robot(){
+                pinMode(SENS_M1, OUTPUT);
+                pinMode(SENS_M2, OUTPUT);
+                pinMode(enablePin, OUTPUT);
+                // Initialisation du port série
+                Serial.begin(9600);
+                sonor = new Sonor();
+	    }
+
+
+  	void move(short direction = 1,short vitesse = 200
+                 ,short delai = 2){
+
+    if (Serial.available() > 0)
+                {
+
+      //
+      // Sens du mouvement
+      //
+      if (direction) // avant
+      {
+        digitalWrite(motorPin1, HIGH);
+        digitalWrite(motorPin2, LOW);
+        Serial.print("Avant ");
+        Serial.println(vitesse);
+      }
+      else if (direction==0) // arrière
+      {
+        digitalWrite(motorPin1, LOW);
+        digitalWrite(motorPin2, HIGH);
+        Serial.print("Arriere ");
+        Serial.println(state);
+      }
+      else // Stop (freinage)
+      {
+        digitalWrite(motorPin1, HIGH);
+        digitalWrite(motorPin2, HIGH);
+        Serial.println("Stop");
+      }
+      //
+      // Vitesse du mouvement
+      //
+      analogWrite(enablePin, abs(state));
+    }
+    delay(100);
+}
+/*
+#ifndef ROBOT_H
 	#define VITESSE_M1 3
 	#define VITESSE_M2 11
 	#define FREIN_M1 8
@@ -84,3 +143,4 @@ class Robot{
  			short vitesseBoth = 200;
  		}
 };
+*/
