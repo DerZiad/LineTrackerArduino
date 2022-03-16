@@ -4,10 +4,10 @@
 	#define W 0
 
 	//PIN ROBOT
-	#define MOTORPIN1 = 31; 
-	#define MOTORPIN2 = 30;
-	#define ENABLEPIN1 = 4;
-	#define MOTORPIN3 = 33;
-	#define MOTORPIN4 = 32;
-	#define ENABLEPIN1 = 3;
+	#define MOTORPIN1 53 
+	#define MOTORPIN2 52
+	#define ENABLEPIN1 10
+	#define MOTORPIN3 51
+	#define MOTORPIN4 50
+	#define ENABLEPIN2 9
 #endif

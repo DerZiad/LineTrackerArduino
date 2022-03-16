@@ -13,9 +13,9 @@ void afficher(Element *tete){
     Element* iterator = tete;
     int cmp = 1;
     while(iterator != NULL){
-        Serial.print("Element " + cmp + " : " + iterator->action + " ");
+        //Serial.print("Element " + cmp + " : " + iterator->action + " ");
         for(int i=0;i<4;i++){
-            Serial.print("%d ",iterator->digits[i]);
+            Serial.print(iterator->digits[i]);
         } 
         Serial.println();
         iterator=iterator->suivant;

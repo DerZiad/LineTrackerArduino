@@ -101,7 +101,7 @@ void loop() {
       }else if (nextNoeud->action.equals("LEFT")){
         
       }else if(nextNoeud->action.equals("STOP")){
-        
+        mouvement = 1;
       }
 
       
