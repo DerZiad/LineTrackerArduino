@@ -11,7 +11,7 @@
 #define RST_PIN 8
 
 #ifndef CONSTANTE_H
-  #include "Constance.h"
+  #include "Constante.h"
 #endif
 
 byte card_ID[4];
@@ -32,6 +32,7 @@ MFRC522 mfrc522(SS_PIN, RST_PIN);
 
 //Functions
 void loadSetup();
+void ajuster();
 
 void setup() {
     //Initialisation des capteurs
@@ -81,39 +82,24 @@ void loop() {
   int rightPhotoPin = digitalRead(RIGHT_PHOTOELECTRIQUE_PIN);
 
     if(nextNoeud->digits[0] == leftPhotoPin && nextNoeud->digits[1] == leftMiddlePin && nextNoeud->digits[2] == rightMiddlePin && nextNoeud->digits[3] == rightPhotoPin){
-      //robot->stop(0,1);
+      robot->stop(-1,0);
       if(nextNoeud->action.equals("RIGHT")){
-        //robot->turn(1)
-
-      leftPhotoPin = digitalRead(LEFT_PHOTOELECTRIQUE_PIN);
-      leftMiddlePin =digitalRead(MIDDLE_LEFT_PHOTOELECTRIQUE_PIN);
-      rightMiddlePin =digitalRead(MIDDLE_RIGHT_PHOTOELECTRIQUE_PIN);
-      rightPhotoPin = digitalRead(RIGHT_PHOTOELECTRIQUE_PIN);
-
-      while(leftPhotoPin != W || leftMiddlePin != D || rightMiddlePin != D || rightPhotoPin != W){
-        leftPhotoPin = digitalRead(LEFT_PHOTOELECTRIQUE_PIN);
-        leftMiddlePin =digitalRead(MIDDLE_LEFT_PHOTOELECTRIQUE_PIN);
-        rightMiddlePin =digitalRead(MIDDLE_RIGHT_PHOTOELECTRIQUE_PIN);
-        rightPhotoPin = digitalRead(RIGHT_PHOTOELECTRIQUE_PIN);
-      }
-
-      //robot->stop();
+          robot->turn(1,80,80,-1);
+          ajuster();
       }else if (nextNoeud->action.equals("LEFT")){
-        
+          robot->turn(0,80,80,-1);
+          ajuster();
       }else if(nextNoeud->action.equals("STOP")){
-        mouvement = 1;
+          robot->stop(-1,0);
+          mouvement = 1;
       }
-
-      
-    }
-   
-   
-  if(leftPhotoPin == W && leftMiddlePin == D && rightMiddlePin == D && rightPhotoPin == W){
-    robot->move(1,100,6);
-  }
-  
-  
-    
+    }else{
+      if(leftPhotoPin == W && leftMiddlePin == D && rightMiddlePin == D && rightPhotoPin == W){
+        robot->move(1,100,-1);
+      }else{
+          
+      }
+    }    
 }
 
 
@@ -187,5 +173,18 @@ void loadSetup(){
     
   }
   nextNoeud = depiler(tete);
-  
+}
+
+void ajuster(){
+  int leftPhotoPin = digitalRead(LEFT_PHOTOELECTRIQUE_PIN);
+  int leftMiddlePin =digitalRead(MIDDLE_LEFT_PHOTOELECTRIQUE_PIN);
+  int rightMiddlePin =digitalRead(MIDDLE_RIGHT_PHOTOELECTRIQUE_PIN);
+  int rightPhotoPin = digitalRead(RIGHT_PHOTOELECTRIQUE_PIN);
+  while(leftPhotoPin != W || leftMiddlePin != D || rightMiddlePin != D || rightPhotoPin != W){
+    leftPhotoPin = digitalRead(LEFT_PHOTOELECTRIQUE_PIN);
+    leftMiddlePin =digitalRead(MIDDLE_LEFT_PHOTOELECTRIQUE_PIN);
+    rightMiddlePin =digitalRead(MIDDLE_RIGHT_PHOTOELECTRIQUE_PIN);
+    rightPhotoPin = digitalRead(RIGHT_PHOTOELECTRIQUE_PIN);
+  }
+  robot->stop(-1,0);
 }

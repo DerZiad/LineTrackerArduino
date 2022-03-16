@@ -1,7 +1,5 @@
-#ifndef SONOR_H
-	#define TRIG_PIN 2
-	#define ECHO_PIN 4
-	#define speedSonor 59
+#ifndef CONSTANTE_H
+	#include "Sonor.h"
 #endif
 class Sonor{	
 	public:

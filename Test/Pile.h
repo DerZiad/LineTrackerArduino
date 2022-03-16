@@ -1,4 +1,6 @@
+#ifndef PILE_H
 #define PILE_H
+#endif
 typedef struct Element Element;
 struct Element{
     short digits[4];

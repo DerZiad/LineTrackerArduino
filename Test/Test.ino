@@ -1,24 +1,33 @@
-#include "Robot.h"
-#include "Sonor.h"
+#define D 1
+#define W 0
+#include "Pile.h"
 
-Robot *robot = NULL;
+static String right = "RIGHT";
+static String left = "LEFT";
+//static String forward = "FORWARD"
+static String stop = "STOP";
+
+Element *element = NULL;
+void loadDepartBuvette(){
+  empiler(element,D,D,D,D,right);
+  empiler(element,D,D,D,D,left);
+  
+  empiler(element,D,D,D,W,right);
+  empiler(element,D,D,D,D,stop);
+}
+
 void setup() {
-  robot = new Robot();
   Serial.begin(9600);
 }
 
 void loop() {
-  robot->move(1,200,4);
-  Serial.println("About to stop");
-  robot->stop(2,0);
-  robot->move(0,200,4);
-  Serial.println("About to stop");
-  robot->stop(2,0);
-  float mesure = 0;
-  sonor-> calculateDistance(mesure);
-  Serial.println(mesure);
-  /*robot->move(0,200,4);
-  Serial.println("About to stop");
-  robot->stop(2,1);
-  */
+  Serial.println("Loading");
+  loadDepartBuvette();
+  if(element != NULL){
+    Serial.println("OK");
+  }else{
+    Serial.println("Not ok");
+  }
+  //afficher(tete);
+  
 }
