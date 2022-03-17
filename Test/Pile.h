@@ -7,23 +7,22 @@ struct Element{
     String action;
     Element* suivant;
 };
+Element *tete = NULL;
 
-
-void afficher(Element *tete){
+void afficher(){
     Element* iterator = tete;
     int cmp = 1;
     while(iterator != NULL){
-        Serial.print("Element " + String(cmp) + " : " + String(iterator->action) + " ");
         for(int i=0;i<4;i++){
-            Serial.print(iterator->digits[i]);
-        } 
-        Serial.println();
+            //printf("%d",iterator->digits[i]);
+        }
+        //printf("\n");
         iterator=iterator->suivant;
         cmp++;
     }
 }
 
-Element* depiler(Element *tete){
+Element* depiler(){
     Element* temporelle = tete;
     if(temporelle != NULL){
         Element* nouveau = (Element*)malloc(sizeof(Element));
@@ -38,7 +37,7 @@ Element* depiler(Element *tete){
     }
     return NULL;
 }
-void empiler(Element *tete,int x,int y,int z,int k,String action){
+void empiler(int x,int y,int z,int k,String action){
 
     Element* nouveau = (Element*)malloc(sizeof(Element));
 
@@ -50,7 +49,6 @@ void empiler(Element *tete,int x,int y,int z,int k,String action){
     nouveau->action = action;
 
     if(tete != NULL){
-        Serial.println("Work");
         nouveau->suivant = tete;
     }else{
         nouveau->suivant = NULL;

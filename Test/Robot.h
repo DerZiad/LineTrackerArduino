@@ -24,12 +24,17 @@ class Robot{
             digitalWrite(MOTORPIN2, LOW); 
             digitalWrite(MOTORPIN4, LOW); 
 	  			digitalWrite(MOTORPIN1, HIGH); 
+	        	Serial.print("Avant M1");
 		        digitalWrite(MOTORPIN3, HIGH); 
+		        Serial.print("Avant M2");
 	  		}else{
+          Serial.println("Backward");
           digitalWrite(MOTORPIN2, HIGH); 
             digitalWrite(MOTORPIN1, LOW);
 	  			digitalWrite(MOTORPIN4, HIGH); 
+	        	Serial.print("Arriere M1");
 		        digitalWrite(MOTORPIN3, LOW); 
+		        Serial.print("Arriere M2");
 	  		}
 	  		
 		    if(delai != -1){
@@ -44,20 +49,23 @@ class Robot{
 	      	analogWrite(ENABLEPIN2, abs(vitesseRight));
 
 	      	//Stop freinage
-	      	digitalWrite(MOTORPIN2, LOW);
-	      	digitalWrite(MOTORPIN4, LOW);
+	      	
 
 	      	//Direction 1 Right et 0 left
 	  		if(direction == 1){
 	  			digitalWrite(MOTORPIN1, HIGH); 
 	        	Serial.print("Avant M1");
+           digitalWrite(MOTORPIN2, LOW);
 		        digitalWrite(MOTORPIN3, LOW); 
 		        Serial.print("Avant M2");
-	  		}else{
-	  			digitalWrite(MOTORPIN1, LOW); 
-	        	Serial.print("Arriere M1");
-		        digitalWrite(MOTORPIN3, HIGH); 
-		        Serial.print("Arriere M2");
+           digitalWrite(MOTORPIN4, HIGH);
+          }else{
+	  			  digitalWrite(MOTORPIN1, LOW); 
+            Serial.print("Avant M1");
+           digitalWrite(MOTORPIN2, HIGH);
+            digitalWrite(MOTORPIN3, HIGH); 
+            Serial.print("Avant M2");
+           digitalWrite(MOTORPIN4, LOW);
 	  		}
 	  		
 		    if(delai != -1){

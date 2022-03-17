@@ -17,6 +17,7 @@ void loadDepartBuvette(){
 	empiler(D,D,D,W,right);
 	empiler(D,D,D,D,left);
 	empiler(D,D,D,D,right);
+	
 }
 
 void loadDepartBIB(){
