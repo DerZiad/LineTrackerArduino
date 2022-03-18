@@ -46,9 +46,8 @@ void setup() {
     //Initialisation de la card RFID
     SPI.begin();  
     mfrc522.PCD_Init(); 
-
-    robot = new Robot();
     Serial.begin(9600);
+    robot = new Robot();
 }
 
 void getTarget(){
@@ -60,7 +59,7 @@ void getTarget(){
     target = "AMPHI450";
   }
 
-  if(card_ID[0] == Z[0]&& card_ID[1] == Z[1] && card_ID[2] == Z[2] && card_ID[3] == Z[3]){
+  if(card_ID[0] == Z[0]&& card_ID[1] == Z[1] && card_ID[2] == Z[2] && card_ID[3] == Z[3] || true){
     Serial.println("Buvette");
     target = "BUVETTE";
   }
@@ -78,51 +77,56 @@ void loop() {
   if(mouvement==0){
     loadSetup();
   }else{
-  int leftPhotoPin = digitalRead(LEFT_PHOTOELECTRIQUE_PIN);
-  int leftMiddlePin =digitalRead(MIDDLE_LEFT_PHOTOELECTRIQUE_PIN);
-  int rightMiddlePin =digitalRead(MIDDLE_RIGHT_PHOTOELECTRIQUE_PIN);
-  int rightPhotoPin = digitalRead(RIGHT_PHOTOELECTRIQUE_PIN);
-
-    Serial.println(nextNoeud->digits[0]);
-    Serial.println(nextNoeud->digits[1]);
-    Serial.println(nextNoeud->digits[2]);
-    Serial.println(nextNoeud->digits[3]);
-    
-    if(nextNoeud->digits[0] == leftPhotoPin && nextNoeud->digits[1] == leftMiddlePin && nextNoeud->digits[2] == rightMiddlePin && nextNoeud->digits[3] == rightPhotoPin){
-      robot->stop(-1,0);
-      if(nextNoeud->action.equals("RIGHT")){
-          Serial.println("RIGHT");
-          robot->turn(1,150,150,-1);
-          ajuster();
-      }else if (nextNoeud->action.equals("LEFT")){
-        Serial.println("LEFT");
-          robot->turn(0,150,150,-1);
-          ajuster();
-      }else if(nextNoeud->action.equals("STOP")){
-          Serial.println("Stop");
+        int leftPhotoPin = digitalRead(LEFT_PHOTOELECTRIQUE_PIN);
+        int leftMiddlePin =digitalRead(MIDDLE_LEFT_PHOTOELECTRIQUE_PIN);
+        int rightMiddlePin =digitalRead(MIDDLE_RIGHT_PHOTOELECTRIQUE_PIN);
+        int rightPhotoPin = digitalRead(RIGHT_PHOTOELECTRIQUE_PIN);
+        Serial.println(String(nextNoeud->digits[0]) + String(nextNoeud->digits[1]) + String(nextNoeud->digits[2]) + String(nextNoeud->digits[3])); 
+        if(nextNoeud->digits[0] == leftPhotoPin && nextNoeud->digits[1] == leftMiddlePin && nextNoeud->digits[2] == rightMiddlePin && nextNoeud->digits[3] == rightPhotoPin){
           robot->stop(-1,0);
-          mouvement = 1;
-      }
-    }else{
-      if(leftPhotoPin == W && leftMiddlePin == D && rightMiddlePin == D && rightPhotoPin == W){
-        Serial.println("Good");
-        robot->move(1,200,-1);
-      }else {
-          
-      }
-    }    
+          if(nextNoeud->action.equals("RIGHT")){
+              Serial.println("RIGHT");
+              robot->turn(1,150,150,-1);
+              ajuster();
+          }else if (nextNoeud->action.equals("LEFT")){
+            Serial.println("LEFT");
+              robot->turn(0,150,150,-1);
+              ajuster();
+          }else if(nextNoeud->action.equals("STOP")){
+              Serial.println("Stop");
+              robot->stop(-1,0);
+              mouvement = 1;
+          }
+        }else{
+          if(leftPhotoPin == W && leftMiddlePin == D && rightMiddlePin == D && rightPhotoPin == W){
+            Serial.println("Good");
+            robot->move(1,150,-1);
+          }else {
+              if(leftMiddlePin == W && rightMiddlePin == D){
+                Serial.println("Sortie lef");
+                robot->stop(-1,0);
+                robot->turn(1,150,128,-1);
+                ajuster();
+              }else if(leftMiddlePin == D && rightMiddlePin == W){
+                Serial.println("Sortie right");
+                robot->stop(-1,0);
+                robot->turn(0,128,150,-1);
+                ajuster();
+              }
+          }
+        }    
   }
 }
 
 
 void loadSetup(){
   
-  if ( ! mfrc522.PICC_IsNewCardPresent()) {
+  /*if ( ! mfrc522.PICC_IsNewCardPresent()) {
     return;
   }
   if ( ! mfrc522.PICC_ReadCardSerial()) {
     return;
-  }
+  }*/
   
   for (byte i = 0; i < mfrc522.uid.size; i++) {
      card_ID[i]=mfrc522.uid.uidByte[i];
@@ -132,7 +136,7 @@ void loadSetup(){
 
   //DEPART
   if(target.equals("AMPHI250") && startPlace.equals("DEPART")) {
-    //loadDepartAMPHI250(tete);
+   // loadDepartAMPHI250(tete);
   }
 
   if(target.equals("AMPHI450") && startPlace.equals("DEPART")) {
@@ -140,9 +144,9 @@ void loadSetup(){
   }
 
   if(target.equals("BUVETTE") && startPlace.equals("DEPART")) {
+   Serial.println("Loading");
    loadDepartBuvette();
-   Serial.println("Pass pile");
-   //afficher();
+   Serial.println("Done");
    mouvement = 1;
   }
 

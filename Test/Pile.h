@@ -13,10 +13,11 @@ void afficher(){
     Element* iterator = tete;
     int cmp = 1;
     while(iterator != NULL){
+        Serial.println(iterator->action);
         for(int i=0;i<4;i++){
-            //printf("%d",iterator->digits[i]);
+            Serial.print(iterator->digits[i]);
         }
-        //printf("\n");
+        Serial.println();
         iterator=iterator->suivant;
         cmp++;
     }
