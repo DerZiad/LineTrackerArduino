@@ -13,15 +13,17 @@ void afficher(){
     Element* iterator = tete;
     int cmp = 1;
     while(iterator != NULL){
-        Serial.println(iterator->action);
+        printf("Element %d :",cmp);
         for(int i=0;i<4;i++){
-            Serial.print(iterator->digits[i]);
+            printf("%d",iterator->digits[i]);
         }
-        Serial.println();
+        printf("\n");
         iterator=iterator->suivant;
         cmp++;
     }
 }
+
+
 
 Element* depiler(){
     Element* temporelle = tete;
@@ -34,7 +36,10 @@ Element* depiler(){
 
         tete = tete->suivant;
         free(temporelle);
+        Serial.println("Not null");
         return nouveau;
+    }else{
+          Serial.println("null");
     }
     return NULL;
 }
@@ -50,6 +55,7 @@ void empiler(int x,int y,int z,int k,String action){
     nouveau->action = action;
 
     if(tete != NULL){
+        printf("Work");
         nouveau->suivant = tete;
     }else{
         nouveau->suivant = NULL;

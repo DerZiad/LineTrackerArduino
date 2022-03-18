@@ -4,7 +4,7 @@
 typedef struct Element Element;
 struct Element{
     short digits[4];
-    String action;
+    int action;
     Element* suivant;
 };
 Element *tete = NULL;
@@ -38,7 +38,7 @@ Element* depiler(){
     }
     return NULL;
 }
-void empiler(int x,int y,int z,int k,String action){
+void empiler(int x,int y,int z,int k,int action){
 
     Element* nouveau = (Element*)malloc(sizeof(Element));
 

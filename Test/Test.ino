@@ -1,39 +1,29 @@
 #include "Pile.h"
-#ifndef CONSTANTE_H
 #include "Constante.h"
-#endif
+void setup() {
+  Serial.begin(9600);
+  pinMode(8,INPUT);
+  pinMode(9,INPUT);
+  pinMode(10,INPUT);
+  pinMode(11,INPUT);
+}
 
 static String right = "RIGHT";
 static String left = "LEFT";
 //static String forward = "FORWARD"
 static String stope = "STOP";
+
+
 void loadDepartBuvette(){
-  Serial.println("Work 1");
   empiler(D,D,D,D,stope);
-  Serial.println("Work 2");
   empiler(D,D,D,W,right);
-  Serial.println("Work 3");
   empiler(D,D,D,D,left);
-  Serial.println("Work 4");
   empiler(D,D,D,D,right);
-  Serial.println("Work 5");
+  Serial.println(right);
 }
-
-//Robot* robot = NULL;
-void setup() {
-  Serial.begin(9600);
-  //robot = new Robot();
-}
-
 void loop() {
-    loadDepartBuvette();
-    afficher();
-    Serial.println("Work");
-    depiler();
-    afficher();
+  loadDepartBuvette();
+    Element* element = depiler();
+    Serial.println(String(element->action));
     delay(100000);
-   //robot->move(1,200,3);
-   //robot->turn(0,200,200,2);
-   //robot->stop(-1,0);   
-   //robot->move(1,200,3);
 }

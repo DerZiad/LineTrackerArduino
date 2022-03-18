@@ -1,11 +1,11 @@
 #define CONSTANTE_H
-#define D 0
-#define W 1
+#define D 1
+#define W 0
 
 //PIN ROBOT
 #define MOTORPIN1 30 
 #define MOTORPIN2 31
-#define ENABLEPIN1 3
+#define ENABLEPIN1 3 
 #define MOTORPIN3 32
 #define MOTORPIN4 33
 #define ENABLEPIN2 4
