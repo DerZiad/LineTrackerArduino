@@ -10,16 +10,26 @@ who could participate in the final robotics competition
 coming from all over Morocco, even from Africa, and win the
 first prizes.
 
+## List of used materials:
 
 • ARDUINO MEGA 2560
+
 • Complete 2-wheel chassis
+
 • Mini-breadboard
+
 • Cables (MaM, MaF, etc.)
+
 • HC-SR04 Ultrasonic Sensor
+
 • L298N dual H-bridge
+
 • 4 photoelectric sensor modules
+
 • RFID-RC522 module
+
 • Imax B6 Battery Charger
+
 • Multimeter....
 
 ## Contributors:
