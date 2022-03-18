@@ -2,8 +2,9 @@
 
 ## General context:
 
-This competition is organized by the Robotics club and
-Innovation Arts et Métiers, for the benefit of the students of the University
+We are group of 4 computer science students participating in a robotics competition. 
+This is organized by the Robotics club and Innovation
+Arts et Métiers, for the benefit of the students of the University
 MOULAY ISMAIL-Meknes. Its purpose is to designate the teams
 who could participate in the final robotics competition
 “African Robotic Brains 22” to confront teams
