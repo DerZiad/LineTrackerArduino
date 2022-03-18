@@ -46,7 +46,7 @@ void setup() {
     //Initialisation de la card RFID
     SPI.begin();  
     mfrc522.PCD_Init(); 
-    Serial.begin(9600);
+    //Serial.begin(9600);
     robot = new Robot();
 }
 
@@ -59,7 +59,7 @@ void getTarget(){
     target = "AMPHI450";
   }
 
-  if(card_ID[0] == Z[0]&& card_ID[1] == Z[1] && card_ID[2] == Z[2] && card_ID[3] == Z[3] || true){
+  if(card_ID[0] == Z[0]&& card_ID[1] == Z[1] && card_ID[2] == Z[2] && card_ID[3] == Z[3]){
     target = "BUVETTE";
   }
 
@@ -137,7 +137,6 @@ void loadSetup(){
 
   if(target.equals("BUVETTE") && startPlace.equals("DEPART")) {
    loadDepartBuvette();
-   Serial.println("Start movement");
    mouvement = 1;
   }
 
