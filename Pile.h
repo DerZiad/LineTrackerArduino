@@ -9,7 +9,7 @@ struct Element{
 };
 Element *tete = NULL;
 
-void afficher(){
+/*void afficher(){
     Element* iterator = tete;
     int cmp = 1;
     while(iterator != NULL){
@@ -21,7 +21,7 @@ void afficher(){
         iterator=iterator->suivant;
         cmp++;
     }
-}
+}*/
 
 Element* depiler(){
     Element* temporelle = tete;

@@ -31,7 +31,7 @@ void loop() {
     Serial.println("Work");
     depiler();
     afficher();
-    delay(10000);
+    delay(100000);
    //robot->move(1,200,3);
    //robot->turn(0,200,200,2);
    //robot->stop(-1,0);   

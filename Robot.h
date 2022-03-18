@@ -5,8 +5,8 @@ class Robot{
 	public:
 	    Robot(){
         pinMode(MOTORPIN1, OUTPUT);
-                pinMode(MOTORPIN2, OUTPUT);
-                pinMode(ENABLEPIN1, OUTPUT);
+        pinMode(MOTORPIN2, OUTPUT);
+        pinMode(ENABLEPIN1, OUTPUT);
 				pinMode(MOTORPIN3, OUTPUT);
 				pinMode(MOTORPIN4, OUTPUT);
 				pinMode(ENABLEPIN2, OUTPUT);
@@ -50,14 +50,10 @@ class Robot{
 	      	//Direction 1 Right et 0 left
 	  		if(direction == 1){
 	  			digitalWrite(MOTORPIN1, HIGH); 
-	        	Serial.print("Avant M1");
 		        digitalWrite(MOTORPIN3, LOW); 
-		        Serial.print("Avant M2");
 	  		}else{
 	  			digitalWrite(MOTORPIN1, LOW); 
-	        	Serial.print("Arriere M1");
 		        digitalWrite(MOTORPIN3, HIGH); 
-		        Serial.print("Arriere M2");
 	  		}
 	  		
 		    if(delai != -1){
