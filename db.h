@@ -10,7 +10,6 @@ static int right = 1;
 static int left = 2;
 static int stope = 3;
 
-
 void loadDepartBuvette(){
 	empiler(D,D,D,D,stope);
 	empiler(W,D,D,D,right);

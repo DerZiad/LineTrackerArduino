@@ -4,26 +4,24 @@
 typedef struct Element Element;
 struct Element{
     short digits[4];
-    String action;
+    int action;
     Element* suivant;
 };
 Element *tete = NULL;
 
-void afficher(){
+/*void afficher(){
     Element* iterator = tete;
     int cmp = 1;
     while(iterator != NULL){
-        printf("Element %d :",cmp);
+        Serial.println(iterator->action);
         for(int i=0;i<4;i++){
-            printf("%d",iterator->digits[i]);
+            Serial.print(iterator->digits[i]);
         }
-        printf("\n");
+        Serial.println();
         iterator=iterator->suivant;
         cmp++;
     }
-}
-
-
+}*/
 
 Element* depiler(){
     Element* temporelle = tete;
@@ -36,14 +34,11 @@ Element* depiler(){
 
         tete = tete->suivant;
         free(temporelle);
-        Serial.println("Not null");
         return nouveau;
-    }else{
-          Serial.println("null");
     }
     return NULL;
 }
-void empiler(int x,int y,int z,int k,String action){
+void empiler(int x,int y,int z,int k,int action){
 
     Element* nouveau = (Element*)malloc(sizeof(Element));
 
@@ -55,7 +50,6 @@ void empiler(int x,int y,int z,int k,String action){
     nouveau->action = action;
 
     if(tete != NULL){
-        printf("Work");
         nouveau->suivant = tete;
     }else{
         nouveau->suivant = NULL;

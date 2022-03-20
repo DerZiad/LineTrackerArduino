@@ -13,7 +13,7 @@ class Robot{
 	 	}
 
 
-	  	void move(short direction = 1,short vitesse = 200,short delai = 2){
+	  	void move(short direction = 1,short vitesse = 200,float delai = 2){
 
 	  		//Vitesse
 	  		analogWrite(ENABLEPIN1, abs(vitesse));
@@ -21,23 +21,25 @@ class Robot{
         
 	      	//Direction 1 Forward et 0 Backward
 	  		if(direction == 1){
-            digitalWrite(MOTORPIN2, LOW); 
-            digitalWrite(MOTORPIN4, LOW); 
-	  			digitalWrite(MOTORPIN1, HIGH); 
-		        digitalWrite(MOTORPIN3, HIGH); 
-	  		}else{
-          digitalWrite(MOTORPIN2, HIGH); 
-            digitalWrite(MOTORPIN1, LOW);
-	  			digitalWrite(MOTORPIN4, HIGH); 
+            digitalWrite(MOTORPIN2, HIGH); 
+            digitalWrite(MOTORPIN4, HIGH); 
+	  			digitalWrite(MOTORPIN1, LOW); 
 		        digitalWrite(MOTORPIN3, LOW); 
+	  		}else{
+          digitalWrite(MOTORPIN2, LOW); 
+          digitalWrite(MOTORPIN4, LOW);
+          
+            digitalWrite(MOTORPIN1, HIGH);
+	  			 
+		        digitalWrite(MOTORPIN3, HIGH); 
 	  		}
 	  		
 		    if(delai != -1){
-		    	delay(delai * 1000);
+		    	delay((int)(delai * 1000));
 		    }
 		}
 
-		void turn(short direction = 1,short vitesseLeft = 200,short vitesseRight=200,short delai = 2){
+		void turn(short direction = 1,short vitesseLeft = 200,short vitesseRight=200,float delai = 2){
 
 	  		//Vitesse
 	  		analogWrite(ENABLEPIN1, abs(vitesseLeft));
@@ -48,7 +50,7 @@ class Robot{
 	      	
 
 	      	//Direction 1 Right et 0 left
-	  		if(direction == 1){
+	  		if(direction == 0){
 	  			digitalWrite(MOTORPIN1, HIGH); 
           digitalWrite(MOTORPIN2, LOW);
 	        	Serial.print("Avant M1");
@@ -65,7 +67,7 @@ class Robot{
 	  		}
 	  		
 		    if(delai != -1){
-		    	delay(delai * 1000);
+		    	delay((int)(delai * 1000));
 		    }
 		}
 

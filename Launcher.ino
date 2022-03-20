@@ -5,12 +5,7 @@
 #endif
 #include "Robot.h"
 #include "db.h"
-#define LEFT_PHOTOELECTRIQUE_PIN 11
-#define MIDDLE_LEFT_PHOTOELECTRIQUE_PIN 10
-#define MIDDLE_RIGHT_PHOTOELECTRIQUE_PIN 9
-#define RIGHT_PHOTOELECTRIQUE_PIN 8
-#define SS_PIN 53
-#define RST_PIN 5
+#include "Sonor.h"
 
 #ifndef CONSTANTE_H
   #include "Constante.h"
@@ -27,9 +22,14 @@ int mouvement;
 String target = "";
 
 Element *nextNoeud = NULL;
+int depart = 0;
+int passageCarte = 0;
+int firstObstacle = 0;
 Robot *robot = NULL;
 MFRC522 mfrc522(SS_PIN, RST_PIN);
+Sonor* sonor = NULL;
 
+int moveTurn = 60;
 //Functions
 void loadSetup();
 void ajuster();
@@ -47,6 +47,7 @@ void setup() {
     mfrc522.PCD_Init(); 
     Serial.begin(9600);
     robot = new Robot();
+    sonor = new Sonor();
 }
 
 void getTarget(){
@@ -72,101 +73,190 @@ void getTarget(){
 }
 
 void loop() {
-  if(mouvement==0){
-    loadSetup();
-  }else{
-        int leftPhotoPin = digitalRead(LEFT_PHOTOELECTRIQUE_PIN);
-        int leftMiddlePin =digitalRead(MIDDLE_LEFT_PHOTOELECTRIQUE_PIN);
-        int rightMiddlePin =digitalRead(MIDDLE_RIGHT_PHOTOELECTRIQUE_PIN);
-        int rightPhotoPin = digitalRead(RIGHT_PHOTOELECTRIQUE_PIN);
-        if(nextNoeud->digits[0] == leftPhotoPin && nextNoeud->digits[1] == leftMiddlePin && nextNoeud->digits[2] == rightMiddlePin && nextNoeud->digits[3] == rightPhotoPin){
-          if(leftPhotoPin == D && leftMiddlePin == D && rightMiddlePin == D && rightPhotoPin == D){
-              if(nextNoeud->action == 1){
-                robot->move(1,100,-1);
-                while(leftPhotoPin != W || leftMiddlePin != W || rightMiddlePin != W || rightPhotoPin != W){
-                  leftPhotoPin = digitalRead(LEFT_PHOTOELECTRIQUE_PIN);
-                  leftMiddlePin =digitalRead(MIDDLE_LEFT_PHOTOELECTRIQUE_PIN);
-                  rightMiddlePin =digitalRead(MIDDLE_RIGHT_PHOTOELECTRIQUE_PIN);
-                  rightPhotoPin = digitalRead(RIGHT_PHOTOELECTRIQUE_PIN);
-                }
-                robot->stop(-1,0);
-                robot->turn(1,60,60,-1);              
-                ajuster();
-                
-            }else if (nextNoeud->action == 2){
-                robot->move(1,100,-1);
-                while(leftPhotoPin != W || leftMiddlePin != W || rightMiddlePin != W || rightPhotoPin != W){
-                  leftPhotoPin = digitalRead(LEFT_PHOTOELECTRIQUE_PIN);
-                  leftMiddlePin =digitalRead(MIDDLE_LEFT_PHOTOELECTRIQUE_PIN);
-                  rightMiddlePin =digitalRead(MIDDLE_RIGHT_PHOTOELECTRIQUE_PIN);
-                  rightPhotoPin = digitalRead(RIGHT_PHOTOELECTRIQUE_PIN);
-                }
-                robot->stop(-1,0);
-                robot->turn(0,60,60,-1);
-                ajuster();
-            }else if(nextNoeud->action == 3){
-                Serial.println("STOP");
-                robot->stop(-1,1);
-                mouvement = 0;
-            }
-          }else{
-              if(nextNoeud->action == 1){
-                robot->move(1,60,0.5);
-                robot->stop(-1,0);
-                robot->turn(1,70,70,-1);
-                ajuster();
-                robot->stop(-1,0);
-                ajuster();
-                
-            }else if (nextNoeud->action == 2){
-                robot->move(1,60,0.5);
-                robot->stop(-1,0);
-                robot->turn(0,70,70,1);
-                ajuster();
-                robot->stop(-1,0);
-                ajuster();
-            }else if(nextNoeud->action == 3){
-                Serial.println("STOP");
-                robot->stop(-1,1);
-                mouvement = 0;
-            }
-          }
-          robot->stop(-1,0);
-          
-          nextNoeud = depiler();
-        }else{
-          if((leftPhotoPin == W && leftMiddlePin == D && rightMiddlePin == D && rightPhotoPin == W) || (leftPhotoPin == D && leftMiddlePin == D && rightMiddlePin == D && rightPhotoPin == W) || (leftPhotoPin == W && leftMiddlePin == D && rightMiddlePin == D && rightPhotoPin == D)){
-            Serial.println("Move");
-            robot->move(1,120 ,-1);
-          }else {
-              if(leftMiddlePin == W){
-                Serial.println("Devilla lisr");
-                robot->stop(-1,0);
-                robot->turn(1,40,40,-1);
-                ajuster();
-              }else if(rightMiddlePin == W){
-                Serial.println("Devilla limn");
-                robot->stop(-1,0);
-                robot->turn(0,40,40,-1);
-                ajuster();
-              }else if (leftPhotoPin == W && leftMiddlePin == W && rightMiddlePin == W && rightPhotoPin == D){
-                Serial.println("Devilla lisr");
-                robot->stop(-1,0);
-                robot->turn(1,40,40,-1);
-                ajuster();
-                
-              }else if (leftPhotoPin == D && leftMiddlePin == W && rightMiddlePin == W && rightPhotoPin == W){
-                Serial.println("Devilla lisr");
-                robot->stop(-1,0);
-                robot->turn(0,40,40,-1);
-                ajuster();
-                
+  float mesure = sonor->calculateDistance();
+  Serial.println(mesure);
+  if(mesure > 9){
+              if(firstObstacle == 0){
+                  int leftPhotoPin = digitalRead(LEFT_PHOTOELECTRIQUE_PIN);
+                  int leftMiddlePin =digitalRead(MIDDLE_LEFT_PHOTOELECTRIQUE_PIN);
+                  int rightMiddlePin =digitalRead(MIDDLE_RIGHT_PHOTOELECTRIQUE_PIN);
+                  int rightPhotoPin = digitalRead(RIGHT_PHOTOELECTRIQUE_PIN);
+                  if((leftPhotoPin == W && leftMiddlePin == D && rightMiddlePin == D && rightPhotoPin == W)){
+                      Serial.println("Move");
+                      robot->move(1,100 ,-1);
+                    }else {
+                        if(leftMiddlePin == W){
+                          Serial.println("Devilla lisr");
+                          robot->stop(-1,0);
+                          robot->turn(1,moveTurn,moveTurn,-1);
+                          ajuster();
+                        }else if(rightMiddlePin == W){
+                          Serial.println("Devilla limn");
+                          robot->stop(-1,0);
+                          robot->turn(0,moveTurn,moveTurn,-1);
+                          ajuster();
+                        }else if (leftPhotoPin == W && leftMiddlePin == W && rightMiddlePin == W && rightPhotoPin == D){
+                          Serial.println("Devilla lisr");
+                          robot->stop(-1,0);
+                          robot->turn(1,moveTurn,moveTurn,-1);
+                          ajuster();
+                          
+                        }else if (leftPhotoPin == D && leftMiddlePin == W && rightMiddlePin == W && rightPhotoPin == W){
+                          Serial.println("Devilla lisr");
+                          robot->stop(-1,0);
+                          robot->turn(0,moveTurn,moveTurn,-1);
+                          ajuster();
+                        }else if (leftPhotoPin == D && leftMiddlePin == D && rightMiddlePin == D && rightPhotoPin == W){
+                          robot->move(1,100,-1);
+                          while(leftPhotoPin != W || leftMiddlePin != W || rightMiddlePin != W || rightPhotoPin != W){
+                            leftPhotoPin = digitalRead(LEFT_PHOTOELECTRIQUE_PIN);
+                            leftMiddlePin =digitalRead(MIDDLE_LEFT_PHOTOELECTRIQUE_PIN);
+                            rightMiddlePin =digitalRead(MIDDLE_RIGHT_PHOTOELECTRIQUE_PIN);
+                            rightPhotoPin = digitalRead(RIGHT_PHOTOELECTRIQUE_PIN);
+                          }
+                          robot->stop(0,-1);
+                          robot->turn(0,60,60,-1);
+                          ajuster();
+                        }else if (leftPhotoPin == W && leftMiddlePin == D && rightMiddlePin == D && rightPhotoPin == D){
+                          robot->move(1,100,-1);
+                          while(leftPhotoPin != W || leftMiddlePin != W || rightMiddlePin != W || rightPhotoPin != W){
+                            leftPhotoPin = digitalRead(LEFT_PHOTOELECTRIQUE_PIN);
+                            leftMiddlePin =digitalRead(MIDDLE_LEFT_PHOTOELECTRIQUE_PIN);
+                            rightMiddlePin =digitalRead(MIDDLE_RIGHT_PHOTOELECTRIQUE_PIN);
+                            rightPhotoPin = digitalRead(RIGHT_PHOTOELECTRIQUE_PIN);
+                          }
+                          robot->stop(0,-1);
+                          robot->turn(1,60,60,-1);
+                          ajuster();
+
+                        }else if(leftPhotoPin == D && leftMiddlePin == D && rightMiddlePin == D && rightPhotoPin == W){
+                          robot->move(1,100,-1);
+                          while(leftPhotoPin != W || leftMiddlePin != W || rightMiddlePin != W || rightPhotoPin != W){
+                            leftPhotoPin = digitalRead(LEFT_PHOTOELECTRIQUE_PIN);
+                            leftMiddlePin =digitalRead(MIDDLE_LEFT_PHOTOELECTRIQUE_PIN);
+                            rightMiddlePin =digitalRead(MIDDLE_RIGHT_PHOTOELECTRIQUE_PIN);
+                            rightPhotoPin = digitalRead(RIGHT_PHOTOELECTRIQUE_PIN);
+                          }
+                          robot->stop(0,-1);
+                          robot->turn(0,60,60,-1);
+                          ajuster();
+                        }else{
+                          robot->stop(-1,0);
+                        }
+                    }
               }else{
+                    if(mouvement==0){
+                      loadSetup();
+                    }else{
+              int leftPhotoPin = digitalRead(LEFT_PHOTOELECTRIQUE_PIN);
+              int leftMiddlePin =digitalRead(MIDDLE_LEFT_PHOTOELECTRIQUE_PIN);
+              int rightMiddlePin =digitalRead(MIDDLE_RIGHT_PHOTOELECTRIQUE_PIN);
+              int rightPhotoPin = digitalRead(RIGHT_PHOTOELECTRIQUE_PIN);
+              Serial.print(String(leftPhotoPin) + String(leftMiddlePin) +String(rightMiddlePin) + String(rightPhotoPin));
+              if(nextNoeud->digits[0] == leftPhotoPin && nextNoeud->digits[1] == leftMiddlePin && nextNoeud->digits[2] == rightMiddlePin && nextNoeud->digits[3] == rightPhotoPin){
+                if(leftPhotoPin == D && leftMiddlePin == D && rightMiddlePin == D && rightPhotoPin == D){
+                    if(nextNoeud->action == 1){
+                      robot->move(1,100,-1);
+                      while(leftPhotoPin != W || leftMiddlePin != W || rightMiddlePin != W || rightPhotoPin != W){
+                        leftPhotoPin = digitalRead(LEFT_PHOTOELECTRIQUE_PIN);
+                        leftMiddlePin =digitalRead(MIDDLE_LEFT_PHOTOELECTRIQUE_PIN);
+                        rightMiddlePin =digitalRead(MIDDLE_RIGHT_PHOTOELECTRIQUE_PIN);
+                        rightPhotoPin = digitalRead(RIGHT_PHOTOELECTRIQUE_PIN);
+                      }
+                      robot->stop(-1,0);
+                      robot->turn(1,60,60,-1);              
+                      ajuster();
+                      
+                  }else if (nextNoeud->action == 2){
+                      robot->move(1,100,-1);
+                      while(leftPhotoPin != W || leftMiddlePin != W || rightMiddlePin != W || rightPhotoPin != W){
+                        leftPhotoPin = digitalRead(LEFT_PHOTOELECTRIQUE_PIN);
+                        leftMiddlePin =digitalRead(MIDDLE_LEFT_PHOTOELECTRIQUE_PIN);
+                        rightMiddlePin =digitalRead(MIDDLE_RIGHT_PHOTOELECTRIQUE_PIN);
+                        rightPhotoPin = digitalRead(RIGHT_PHOTOELECTRIQUE_PIN);
+                      }
+                      robot->stop(-1,0);
+                      robot->turn(0,60,60,-1);
+                      ajuster();
+                  }else if(nextNoeud->action == 3){
+                      Serial.println("STOP");
+                      robot->stop(-1,1);
+                      mouvement = 0;
+                  }
+                }else{
+                    if(nextNoeud->action == 1){
+                      robot->move(1,100,0.5);
+                      robot->stop(-1,0);
+                      robot->turn(1,60,60,-1);
+                      ajuster();
+                      robot->stop(-1,0);
+                      ajuster();
+                      
+                  }else if (nextNoeud->action == 2){
+                      robot->move(1,60,0.5);
+                      robot->stop(-1,0);
+                      robot->turn(0,60,60,1);
+                      ajuster();
+                      robot->stop(-1,0);
+                      ajuster();
+                  }else if(nextNoeud->action == 3){
+                      Serial.println("STOP");
+                      robot->stop(-1,1);
+                      mouvement = 0;
+                  }
+                }
                 robot->stop(-1,0);
+                
+                nextNoeud = depiler();
+              }else{
+                if((leftPhotoPin == W && leftMiddlePin == D && rightMiddlePin == D && rightPhotoPin == W) || (leftPhotoPin == D && leftMiddlePin == D && rightMiddlePin == D && rightPhotoPin == W) || (leftPhotoPin == W && leftMiddlePin == D && rightMiddlePin == D && rightPhotoPin == D)){
+                  Serial.println("Move");
+                  robot->move(1,100 ,-1);
+                }else {
+                    if(leftMiddlePin == W){
+                      Serial.println("Devilla lisr");
+                      robot->stop(-1,0);
+                      robot->turn(1,60,60,-1);
+                      ajuster();
+                    }else if(rightMiddlePin == W){
+                      Serial.println("Devilla limn");
+                      robot->stop(-1,0);
+                      robot->turn(0,60,60,-1);
+                      ajuster();
+                    }else if (leftPhotoPin == W && leftMiddlePin == W && rightMiddlePin == W && rightPhotoPin == D){
+                      Serial.println("Devilla lisr");
+                      robot->stop(-1,0);
+                      robot->turn(1,60,60 ,-1);
+                      ajuster();
+                      
+                    }else if (leftPhotoPin == D && leftMiddlePin == W && rightMiddlePin == W && rightPhotoPin == W){
+                      Serial.println("Devilla lisr");
+                      robot->stop(-1,0);
+                      robot->turn(0,60,60,-1);
+                      ajuster();
+                      
+                    }else{
+                      robot->stop(-1,0);
+                    }
+                }
+              }    
+        }
               }
-          }
-        }    
+              
+                
+    }else{
+    robot->stop(0,-1);
+    if(firstObstacle == 0){
+      if(mouvement==0){
+        loadSetup();
+      }
+      firstObstacle = 1;
+    }
   }
+  
+      
+ 
+           
 }
 
 
@@ -179,6 +269,7 @@ void loadSetup(){
   }
   for (byte i = 0; i < mfrc522.uid.size; i++) {
      card_ID[i]=mfrc522.uid.uidByte[i];
+     Serial.print(card_ID[i] + "-");
   }
 
   getTarget();

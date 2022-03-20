@@ -1,16 +1,25 @@
 #define CONSTANTE_H
-#define D 0
-#define W 1
+#define D 1
+#define W 0
 
 //PIN ROBOT
-#define MOTORPIN1 30 
-#define MOTORPIN2 31
-#define ENABLEPIN1 3
-#define MOTORPIN3 32
-#define MOTORPIN4 33
+#define MOTORPIN1 8 
+#define MOTORPIN2 7
+#define ENABLEPIN1 9 
+#define MOTORPIN3 6
+#define MOTORPIN4 5
 #define ENABLEPIN2 4
 
 //Pin sonor
-#define TRIG_PIN 2
-#define ECHO_PIN 4
-#define speedSonor 59
+#define TRIG_PIN 13
+#define ECHO_PIN 12
+
+//Pin Sensors
+#define LEFT_PHOTOELECTRIQUE_PIN 17
+#define MIDDLE_LEFT_PHOTOELECTRIQUE_PIN 16
+#define MIDDLE_RIGHT_PHOTOELECTRIQUE_PIN 15
+#define RIGHT_PHOTOELECTRIQUE_PIN 14
+
+//Pin RFID
+#define SS_PIN 53
+#define RST_PIN 22
