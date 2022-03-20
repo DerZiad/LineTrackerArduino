@@ -6,12 +6,11 @@ void setup() {
   pinMode(MIDDLE_LEFT_PHOTOELECTRIQUE_PIN,INPUT);
   pinMode(MIDDLE_RIGHT_PHOTOELECTRIQUE_PIN,INPUT);
   pinMode(RIGHT_PHOTOELECTRIQUE_PIN,INPUT);
+  robot = new Robot();
   Serial.begin(9600);
 }
 void loop() {
-  int leftPhotoPin = digitalRead(LEFT_PHOTOELECTRIQUE_PIN);
-              int leftMiddlePin =digitalRead(MIDDLE_LEFT_PHOTOELECTRIQUE_PIN);
-              int rightMiddlePin =digitalRead(MIDDLE_RIGHT_PHOTOELECTRIQUE_PIN);
-              int rightPhotoPin = digitalRead(RIGHT_PHOTOELECTRIQUE_PIN);
-              Serial.println(String(leftPhotoPin) + String(leftMiddlePin) +String(rightMiddlePin) + String(rightPhotoPin));
+  robot-> move(1,100,-1);
+  //robot->turn(1,100,100,-1);
+  
 }
