@@ -8,7 +8,7 @@ Welcome to the LineTrackerArduino project! This repository documents the work of
 
 ## Normal Line Tracker Code
 
-For the standard line tracker code, please refer to [this section](#) to access the relevant information.
+For the standard line tracker code, please refer to [this section](https://github.com/DerZiad/LineTrackerArduino/tree/main/NormalCodeForLineTracker) to access the relevant information.
 
 ## Materials Used
 
