@@ -1,5 +1,5 @@
 #ifndef CONSTANTE_H
-	//#include "Sonor.h"
+	#include "Constante.h"
 #endif
 class Sonor{	
 	public:

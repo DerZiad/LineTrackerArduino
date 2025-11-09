@@ -48,7 +48,7 @@ class Robot{
           
 
           //Direction 1 Right et 0 left
-        if(direction == 1){
+        if(direction == 0){
           digitalWrite(MOTORPIN1, HIGH); 
           digitalWrite(MOTORPIN2, LOW);
             Serial.print("Avant M1");
